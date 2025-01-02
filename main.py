@@ -50,24 +50,3 @@ async def handle_GetIPInfo_group_message(websocket, msg):
             "处理GetIPInfo群消息失败，错误信息：" + str(e),
         )
         return
-
-
-# 群通知处理函数
-async def handle_GetIPInfo_group_notice(websocket, msg):
-    # 确保数据目录存在
-    os.makedirs(DATA_DIR, exist_ok=True)
-    try:
-        user_id = str(msg.get("user_id"))
-        group_id = str(msg.get("group_id"))
-        raw_message = str(msg.get("raw_message"))
-        role = str(msg.get("sender", {}).get("role"))
-        message_id = str(msg.get("message_id"))
-
-    except Exception as e:
-        logging.error(f"处理GetIPInfo群通知失败: {e}")
-        await send_group_msg(
-            websocket,
-            group_id,
-            "处理GetIPInfo群通知失败，错误信息：" + str(e),
-        )
-        return
