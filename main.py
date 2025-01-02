@@ -2,6 +2,7 @@
 
 import logging
 import os
+import re
 import sys
 import aiohttp
 from bs4 import BeautifulSoup
@@ -66,11 +67,12 @@ async def handle_GetIPInfo_group_message(websocket, msg):
         raw_message = str(msg.get("raw_message"))
         role = str(msg.get("sender", {}).get("role"))
         message_id = str(msg.get("message_id"))
-        if raw_message.startswith("ip"):
-            ip = raw_message.split(" ")[1]
+        match = re.match(r"(ip|IP)([\w.-]+)", raw_message)
+        if match:
+            ip = match.group(2)
             ip_info = await get_ip_info(ip)
             ip_info = parse_ip_info(ip_info)
-            message = f"[CQ:reply,id={message_id}]\n{ip_info}"
+            message = f"[CQ:reply,id={message_id}]{ip_info}"
             await send_group_msg(websocket, group_id, message)
     except Exception as e:
         logging.error(f"处理GetIPInfo群消息失败: {e}")
