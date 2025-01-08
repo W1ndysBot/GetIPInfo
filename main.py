@@ -67,7 +67,7 @@ async def handle_GetIPInfo_group_message(websocket, msg):
         raw_message = str(msg.get("raw_message"))
         role = str(msg.get("sender", {}).get("role"))
         message_id = str(msg.get("message_id"))
-        match = re.match(r"(ip|IP)([\w.-]+)", raw_message)
+        match = re.match(r"\s*(ip|IP)\s*([\w.-]+)\s*", raw_message)
         if match:
             ip = match.group(2)
             ip_info = await get_ip_info(ip)
